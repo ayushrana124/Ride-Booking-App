@@ -1,6 +1,7 @@
 const userModel = require("../models/user.model");
+const BlackListTokenModel = require('../models/blacklistToken.model');
 const userService = require('../services/user.service');
-const { validationResult }= require('express-validator')
+const { validationResult }= require('express-validator');
 
 
 
@@ -10,7 +11,7 @@ module.exports.registerUser = async (req,res,next) => {
    return res.status(400).json({errors  : errors.array()}); 
   }
 
-  const {fullname, lastname, email, password} = req.body; //we never save pass. to DB directly, we do hashing first
+  const {fullname, email, password} = req.body; //we never save pass. to DB directly, we do hashing first
   const hashPassword = await userModel.hashPassword(password);
 
   const user = await userService.createUser({
@@ -42,5 +43,20 @@ module.exports.loginUser = async (req,res,next) => {
     }
     
     const token = user.generateAuthToken();
+
+    res.cookie('token', token); //set token in cookie
     res.status(200).json({token, user});
+}
+
+module.exports.getUserProfile = async (req,res,next) => {
+    res.status(200).json(req.user); //req.user is coming from authMiddleware that we set as "req.user = user"
+}
+
+module.exports.logoutUser = async (req,res,next) => {
+    res.clearCookie('token'); //clear cookie
+    const token = req.cookies.token || req.headers.authorization?.split(' ')[1]; //agr token cookie m h to use kro wrna header m h
+
+    await BlackListTokenModel.create({token}); //add token to blacklist
+
+    res.status(200).json({message : 'Logged out successfully'});
 }

@@ -44,8 +44,95 @@ Example:
 }
 ```
 
-## Notes
+#### /users/login Endpoint Documentation
 
-*   Ensure that you handle different user types appropriately in your application logic.
-*   Implement proper password hashing and salting for security.
-*   Consider adding email verification to ensure the validity of the provided email address.
+## Description
+
+This endpoint allows registered users to log in to their accounts. It requires the user's email and password for authentication.
+
+## HTTP Method
+
+`POST`
+
+## Request Body
+
+The request body should be in JSON format and contain the following fields:
+
+*   `email`: (String) The email address of the user. Must be a valid email format.
+*   `password`: (String) The password for the user account.
+
+## Example response
+```json
+{
+    "user": {
+        "_id": "uniqueUserId123",
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john.doe@example.com",
+    }
+}
+```
+
+
+# /users/profile Endpoint Documentation
+
+## Description
+
+This endpoint retrieves the profile information of the currently authenticated user.
+
+## HTTP Method
+
+`GET`
+
+## Authorization
+
+Requires a valid JWT token in the request header or cookie.
+
+## Response Status Codes
+
+* `200 OK`: Successfully retrieved user profile
+* `401 Unauthorized`: Invalid or missing authentication token
+* `500 Internal Server Error`: An unexpected error occurred on the server
+
+## Example Success Response
+
+```json
+{
+    "user": {
+        "_id": "uniqueUserId123",
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john.doe@example.com",
+    }
+}
+```
+
+# /users/logout Endpoint Documentation
+
+## Description
+
+This endpoint logs out the currently authenticated user by invalidating their JWT token.
+
+## HTTP Method
+
+`GET`
+
+## Authorization
+
+Requires a valid JWT token in the request header or cookie.
+
+## Response Status Codes
+
+* `200 OK`: Successfully logged out
+* `401 Unauthorized`: Invalid or missing authentication token
+* `500 Internal Server Error`: An unexpected error occurred on the server
+
+## Example Success Response
+
+```json
+{
+    "message": "Logged out successfully"
+}
+```
+
+
