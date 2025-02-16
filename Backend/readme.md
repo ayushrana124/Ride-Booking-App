@@ -135,4 +135,79 @@ Requires a valid JWT token in the request header or cookie.
 }
 ```
 
+# Captain Endpoints
+
+# /captain/register Endpoint Documentation
+
+## Description
+
+This endpoint allows new captains to register and create an account. It requires specific captain and vehicle information to be provided in the request body.
+
+## HTTP Method
+
+`POST`
+
+## Request Body
+
+The request body should be in JSON format and contain the following fields:
+
+*   `fullname`: (Object) Contains captain's name information
+    * `firstname`: (String) The first name of the captain
+    * `lastname`: (String) The last name of the captain
+*   `email`: (String) The email address of the captain
+*   `password`: (String) The password for the account
+*   `vehicle`: (Object) Contains vehicle information
+    * `color`: (String) Color of the vehicle
+    * `plate`: (String) License plate number
+    * `capacity`: (Number) Passenger capacity
+    * `vehicleType`: (String) Type of vehicle (must be 'car', 'motorcycle', or 'auto')
+
+Example:
+
+```json
+{
+    "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "password": "SecurePassword123",
+    "vehicle": {
+        "color": "Black",
+        "plate": "ABC123",
+        "capacity": 4,
+        "vehicleType": "car"
+    }
+}
+```
+
+## Response Status Codes
+
+*   `201 Created`: The captain account was successfully created
+*   `400 Bad Request`: The request body is invalid or missing required fields
+*   `409 Conflict`: An account with the provided email address already exists
+*   `500 Internal Server Error`: An unexpected error occurred on the server
+
+## Example Success Response
+
+```json
+{
+    "token": "jwt_token_here",
+    "captain": {
+        "_id": "uniqueCaptainId123",
+        "fullname": {
+            "firstname": "John",
+            "lastname": "Doe"
+        },
+        "email": "john.doe@example.com",
+        "vehicle": {
+            "color": "Black",
+            "plate": "ABC123",
+            "capacity": 4,
+            "vehicleType": "car"
+        }
+    }
+}
+```
+
 

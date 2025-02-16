@@ -1,6 +1,6 @@
 const userModel = require("../models/user.model");
-const BlackListTokenModel = require('../models/blacklistToken.model');
 const userService = require('../services/user.service');
+const BlackListTokenModel = require('../models/blacklistToken.model');
 const { validationResult }= require('express-validator');
 
 
@@ -12,6 +12,11 @@ module.exports.registerUser = async (req,res,next) => {
   }
 
   const {fullname, email, password} = req.body; //we never save pass. to DB directly, we do hashing first
+  
+  const isUserAlreadyExist = await userModel.findOne({email});
+    if(isUserAlreadyExist){
+        return res.status(400).json({error : 'User already exist with this email'}); }
+
   const hashPassword = await userModel.hashPassword(password);
 
   const user = await userService.createUser({
