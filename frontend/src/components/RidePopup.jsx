@@ -1,23 +1,29 @@
 import React from 'react'
 import { MdKeyboardArrowDown } from 'react-icons/md'
-import { FaCar } from "react-icons/fa";
-import { FaUser } from "react-icons/fa6";
-import { FaMotorcycle } from "react-icons/fa";
-import { FaCaravan } from "react-icons/fa";
 
-const ConfirmRide = (props) => {
+const RidePopup = (props) => {
   return (
     <div>
-       <h5 onClick={()=>{
-              props.setconfirmRidePanel(false)
-              props.setVehiclePanelOpen(true)
+      <h5 onClick={()=>{
+              props.setRidePopupPanel(false);
             }} className="text-2xl  absolute text-center top-0 w-[90%] p-3 text-gray-600">
                   <MdKeyboardArrowDown className="m-auto" />
                 </h5>
-        <h3 className="text-2xl font-semibold mb-5">Confirm your Ride</h3>
+        <h3 className="text-2xl font-semibold mb-5 px-4">Pick a New Ride!</h3>
+
+        <div className="flex items-center justify-between px-4">
+          <div className="flex justify-center items-center gap-2">
+            <img className='w-12 h-12 rounded-full object-cover' src="../Avatar.jpg" alt="" />
+            <h2 className='text-lg font-medium'>Ayush Rana</h2>
+            </div>
+
+            <div className="">
+              <h5 className='text-lg font-semibold'>2.2 km</h5>
+            </div>
+          
+        </div>
 
         <div className="flex flex-col justify-between items-center gap-2 mt-5">
-           <FaCar className="text-6xl"  />{" "}
 
            <div className="w-full">
             <div className="p-4 border-b-2 border-gray-300">
@@ -33,17 +39,22 @@ const ConfirmRide = (props) => {
               <p>Mode : Cash</p>
             </div>
           </div>
+          <div className='w-full flex gap-2'>
           <button onClick={()=>{
-            props.setconfirmRidePanel(false)
-            props.setVehicleFound(true)
+            props.setConfirmRidePopupPanel(true);
+            props.setRidePopupPanel(false);
           }} className="font-semibold bg-gradient-to-br from-blue-900 to-sky-600 text-white rounded-lg px-4 py-2 border w-full text-lg mt-2">
-            Confirm Ride
+            Accept 
+        </button>
+          <button onClick={()=>{
+            props.setRidePopupPanel(false);
+          }} className="font-semibold bg-gray-300 text-gray-800 rounded-lg px-4 py-2 border w-full text-lg mt-2">
+            Ignore
         </button>
         </div>
-       
-           
+        </div>
     </div>
   )
 }
 
-export default ConfirmRide
+export default RidePopup
