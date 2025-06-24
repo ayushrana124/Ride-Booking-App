@@ -7,6 +7,7 @@ import VehiclePanel from "../components/VehiclePanel";
 import ConfirmRide from "../components/ConfirmRide";
 import LookingForDriver from "../components/LookingForDriver";
 import WaitingForDriver from "../components/WaitingForDriver";
+import axios from "axios"; // <-- Add axios import
 
 const Home = () => {
   const [pickup, setPickup] = useState("");
@@ -23,6 +24,56 @@ const Home = () => {
   const [waitingForDriver, setWaitingForDriver] = useState(false);
   const waitingForDriverRef = useRef(null);
 
+  const [suggestions, setSuggestions] = useState([]);
+  const [activeField, setActiveField] = useState(null); // "pickup" or "destination"
+  const [loadingSuggestions, setLoadingSuggestions] = useState(false);
+
+  const fetchSuggestions = async (input) => {
+    if (!input || input.length < 3) {
+      setSuggestions([]);
+      return;
+    }
+    setLoadingSuggestions(true);
+    try {
+      const res = await axios.get(
+        "http://localhost:4000/maps/get-suggestions",
+        {
+          params: { input },
+          headers : { Authorization: `Bearer ${localStorage.getItem("token")}` }
+          
+        }
+      );
+      setSuggestions(res.data);
+    } catch (err) {
+      setSuggestions([]);
+    }
+    setLoadingSuggestions(false);
+  };
+
+  const handlePickupChange = (e) => {
+    setPickup(e.target.value);
+    setActiveField("pickup");
+    setPannelOpen(true);
+    fetchSuggestions(e.target.value);
+  };
+
+  const handleDestinationChange = (e) => {
+    setDestination(e.target.value);
+    setActiveField("destination");
+    setPannelOpen(true);
+    fetchSuggestions(e.target.value);
+  };
+
+  const handleSuggestionClick = (suggestion) => {
+    if (activeField === "pickup") {
+      setPickup(suggestion.description);
+    } else if (activeField === "destination") {
+      setDestination(suggestion.description);
+    }
+    setSuggestions([]);
+    setActiveField(null);
+  };
+
   const submitHandler = (e) => {
     e.preventDefault();
   };
@@ -31,7 +82,6 @@ const Home = () => {
     function () {
       gsap.to(panelRef.current, {
         height: pannelOpen ? "70%" : "0%",
-        // opacity: pannelOpen ? 1 : 0,
         padding: pannelOpen ? "2rem" : 0,
         duration: 0.5,
         ease: "power2.inOut",
@@ -140,6 +190,8 @@ const Home = () => {
             ref={panelCloseRef}
             onClick={() => {
               setPannelOpen(false);
+              setSuggestions([]);
+              setActiveField(null);
             }}
             className="absolute top-6 opacity-0 right-4 text-2xl"
           >
@@ -157,24 +209,38 @@ const Home = () => {
               className="bg-[#eee] px-8 py-2 text-lg rounded-lg w-full mb-5"
               type="text"
               value={pickup}
-              onClick={() => setPannelOpen(true)}
-              onChange={(e) => setPickup(e.target.value)}
+              onClick={() => {
+                setPannelOpen(true);
+                setActiveField("pickup");
+                fetchSuggestions(pickup);
+              }}
+              onChange={handlePickupChange}
               placeholder="Add a pickup location"
             />
             <input
               className="bg-[#eee] px-8 py-2 text-lg rounded-lg w-full"
               type="text"
               value={destination}
-              onClick={() => setPannelOpen(true)}
-              onChange={(e) => setDestination(e.target.value)}
+              onClick={() => {
+                setPannelOpen(true);
+                setActiveField("destination");
+                fetchSuggestions(destination);
+              }}
+              onChange={handleDestinationChange}
               placeholder="Enter your destination"
             />
           </form>
         </div>
         <div ref={panelRef} className="bg-white h-0">
           <LocationSearchPanel
+            suggestions={suggestions}
+            loading={loadingSuggestions}
+            onSuggestionClick={handleSuggestionClick}
             setPannelOpen={setPannelOpen}
             setVehiclePanelOpen={setVehiclePanelOpen}
+            setPickup={setPickup}
+            setDestination={setDestination}
+            activeField={activeField}
           />
         </div>
       </div>
