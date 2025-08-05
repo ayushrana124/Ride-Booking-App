@@ -14,7 +14,7 @@ const RidePopup = (props) => {
         <div className="flex items-center justify-between px-4">
           <div className="flex justify-center items-center gap-2">
             <img className='w-12 h-12 rounded-full object-cover' src="../Avatar.jpg" alt="" />
-            <h2 className='text-lg font-medium'>Ayush Rana</h2>
+            <h2 className='text-lg font-medium'>{props.ride?.user.fullname.firstname + " " + props.ride?.user.fullname.lastname}</h2>
             </div>
 
             <div className="">
@@ -28,14 +28,14 @@ const RidePopup = (props) => {
            <div className="w-full">
             <div className="p-4 border-b-2 border-gray-300">
               <h3 className='text-xl font-semibold'><span className='font-bold'>From : </span> 563/11-A</h3>
-              <p>Kakariya talab, Shahjahanpur</p>
+              <p>{props.ride?.pickup}</p>
             </div>
             <div className="p-4 border-b-2 border-gray-300">
               <h3 className='text-xl font-semibold'><span className='font-bold'>To : </span>Gaur City Mall</h3>
-              <p>Surajpur road, Greater Noida</p>
+              <p>{props.ride?.destination}</p>
             </div>
             <div className="p-4">
-              <h3 className='text-xl font-bold'>₹199.20</h3>
+              <h3 className='text-xl font-bold'>₹{props.ride?.fare}</h3>
               <p>Mode : Cash</p>
             </div>
           </div>
@@ -43,6 +43,7 @@ const RidePopup = (props) => {
           <button onClick={()=>{
             props.setConfirmRidePopupPanel(true);
             props.setRidePopupPanel(false);
+            props.confirmRide();
           }} className="font-semibold bg-gradient-to-br from-blue-900 to-sky-600 text-white rounded-lg px-4 py-2 border w-full text-lg mt-2">
             Accept 
         </button>

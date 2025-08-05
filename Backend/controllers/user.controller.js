@@ -4,7 +4,6 @@ const BlackListTokenModel = require('../models/blacklistToken.model');
 const { validationResult }= require('express-validator');
 
 
-
 module.exports.registerUser = async (req,res,next) => {
   const errors = validationResult(req); // agr routes m jo checks kiye {body} m, kuch galat hua to req m miljayega
   if(!errors.isEmpty()){ //if there is error

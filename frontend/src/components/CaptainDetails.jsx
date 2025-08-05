@@ -2,18 +2,23 @@ import React from "react";
 import { MdOutlineSpeed } from "react-icons/md";
 import { IoMdTime } from "react-icons/io";
 import { CgNotes } from "react-icons/cg";
+import { useContext } from "react";
+import { CaptainDataContext } from "../context/CaptainContext";
 
 const CaptainDetails = () => {
+ 
+  const { captain} = useContext(CaptainDataContext);
+
   return (
-    <div>
-      <div className="flex items-center justify-between p-2">
+    <div className="bg-white">
+      <div className="flex items-center justify-between px-4 mt-6 ">
         <div className="flex items-center gap-4 justify-between">
           <img
             className="h-10 w-10 rounded-full object-cover"
             src="../../Avatar.jpeg"
             alt=""
           />
-          <h4 className="text-lg font-medium">Aryan Kashyap</h4>
+          <h4 className="text-lg font-medium capitalize">{captain?.fullname?.firstname + " " + captain?.fullname.lastname}</h4>
         </div>
 
         <div className="">
@@ -22,7 +27,7 @@ const CaptainDetails = () => {
         </div>
       </div>
 
-      <div className="flex justify-between items-center gap-4 p-2 mt-6 bg-gray-100 rounded-lg">
+      <div className="flex justify-between items-center gap-4 px-3 py-4 mx-4 mt-6 bg-gray-100 rounded-lg">
         <div className="flex flex-col items-center justify-center">
           <IoMdTime className="text-4xl font-thin mb-2" />
           <h5 className="text-lg font-medium">10.2</h5>

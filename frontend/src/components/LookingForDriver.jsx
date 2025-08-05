@@ -23,14 +23,14 @@ const LookingForDriver = (props) => {
                    <div className="w-full">
                     <div className="p-4 border-b-2 border-gray-300">
                       <h3 className='text-xl font-semibold'><span className='font-bold'>From : </span> 563/11-A</h3>
-                      <p>Kakariya talab, Shahjahanpur</p>
+                      <p>{props.pickup}</p>
                     </div>
                     <div className="p-4 border-b-2 border-gray-300">
                       <h3 className='text-xl font-semibold'><span className='font-bold'>To : </span>Gaur City Mall</h3>
-                      <p>Surajpur road, Greater Noida</p>
+                      <p>{props.destination}</p>
                     </div>
                     <div className="p-4">
-                      <h3 className='text-xl font-bold'>₹199.20</h3>
+                      <h3 className='text-xl font-bold'>₹{props.fare[props.vehicleType]}</h3>
                       <p>Mode : Cash</p>
                    
                     </div>

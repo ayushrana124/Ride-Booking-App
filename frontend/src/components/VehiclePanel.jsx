@@ -17,6 +17,7 @@ const VehiclePanel = (props) => {
         <div onClick={() => {
             props.setconfirmRidePanel(true)
             props.setVehiclePanelOpen(false)
+            props.setVehicleType('car')
         }} className="flex p-2 bg-gray-100 justify-between items-center w-full border-2 active:border-black rounded-xl mb-2">
           <div className="p-4 bg-slate-100 rounded-full">
             <FaCar className="text-4xl" />{" "}
@@ -29,12 +30,13 @@ const VehiclePanel = (props) => {
             </div>
             <h5 className="font-medium text-sm">2 mins away</h5>
           </div>
-          <h2 className="text-xl font-semibold">₹199.20</h2>
+          <h2 className="text-xl font-semibold">₹{props.fare.car}</h2>
         </div>
 
         <div onClick={() => {
             props.setconfirmRidePanel(true)
             props.setVehiclePanelOpen(false)
+            props.setVehicleType('motorcycle')
         }} className="flex p-2 bg-gray-100  justify-between items-center w-full border-2 active:border-black rounded-xl mb-2">
           <div className="p-4 bg-slate-100 rounded-full">
             <FaMotorcycle className="text-4xl" />{" "}
@@ -47,12 +49,13 @@ const VehiclePanel = (props) => {
             </div>
             <h5 className="font-medium text-sm">2 mins away</h5>
           </div>
-          <h2 className="text-xl font-semibold">₹89.20</h2>
+          <h2 className="text-xl font-semibold">₹{props.fare.motorcycle}</h2>
         </div>
 
         <div onClick={() => {
             props.setconfirmRidePanel(true)
             props.setVehiclePanelOpen(false)
+            props.setVehicleType('tuktuk')
         }} className="flex p-2 bg-gray-100  justify-between items-center w-full border-2 active:border-black rounded-xl mb-2">
           <div className="p-4 bg-slate-100 rounded-full">
             <FaCaravan className="text-4xl" />{" "}
@@ -65,7 +68,7 @@ const VehiclePanel = (props) => {
             </div>
             <h5 className="font-medium text-sm">2 mins away</h5>
           </div>
-          <h2 className="text-xl font-semibold">₹120.90</h2>
+          <h2 className="text-xl font-semibold">₹{props.fare.tuktuk}</h2>
         </div>
       </div>
   )

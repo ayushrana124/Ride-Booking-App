@@ -10,8 +10,8 @@ import UserProtectWrapper from "./pages/UserProtectWrapper";
 import UserLogout from "./pages/UserLogout";
 import CaptainHome from "./pages/CaptainHome";
 import CaptainProtectWrapper from "./pages/CaptainProtectWrapper";
-import Riding from "./components/Riding";
 import CaptainRiding from "./pages/CaptainRiding";  
+import Riding from "./pages/Riding";
 
 const App = () => {
   return (
