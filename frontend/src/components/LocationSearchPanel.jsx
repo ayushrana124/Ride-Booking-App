@@ -12,9 +12,9 @@ const LocationSearchPanel = ({
   activeField,
 }) => {
   return (
-    <div>
+    <div className="">
       {loading && (
-        <div className="text-center py-2 text-gray-500">Loading...</div>
+        <div className="text-center py-2 text-gray-500 mt-[50%]">Loading...</div>
       )}
       {suggestions.length > 0 ? (
         suggestions.map((suggestion, index) => (
@@ -23,7 +23,7 @@ const LocationSearchPanel = ({
             onClick={() => {
               onSuggestionClick(suggestion);
             }}
-            className="flex gap-4 items-center justify-around mb-2 active:border-black active:border-2 p-3 rounded-xl cursor-pointer"
+            className="flex gap-4 items-center mb-2 active:border-black p-1 active:border-2 rounded-xl cursor-pointer"
           >
             <h4 className="text-lg">
               <FaLocationDot />
@@ -34,7 +34,7 @@ const LocationSearchPanel = ({
           </div>
         ))
       ) : !loading ? (
-        <div className="text-center py-2 text-gray-400">No suggestions</div>
+        <div className="text-center py-2 mt-[50%] text-gray-400">No suggestions</div>
       ) : null}
     </div>
   );

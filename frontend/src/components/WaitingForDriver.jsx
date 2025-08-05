@@ -21,9 +21,10 @@ const WaitingForDriver = (props) => {
             <FaCar className="text-5xl" />
           </div>
           <div className="text-right">
-            <h2 className="text-lg font-medium">Ayush Rana</h2>
-            <h4 className="text-xl font-semibold -mt-2 -mb-1">UP16 GB 0069</h4>
+            <h2 className="text-lg font-medium capitalize">{props.ride?.captain.fullname.firstname}</h2>
+            <h4 className="text-xl font-semibold -mt-2 -mb-1 uppercase">{props.ride?.captain.vehicle.plate}</h4>
             <p className="text-sm">BMW X-7</p>
+            <h1 className="text-lg font-semibold">OTP : {props.ride?.otp}</h1>
           </div>
         </div>
 
@@ -33,16 +34,16 @@ const WaitingForDriver = (props) => {
               <h3 className="text-xl font-semibold">
                 <span className="font-bold">From : </span> 563/11-A
               </h3>
-              <p>Kakariya talab, Shahjahanpur</p>
+              <p>{props.ride?.pickup}</p>
             </div>
             <div className="p-4 border-b-2 border-gray-300">
               <h3 className="text-xl font-semibold">
                 <span className="font-bold">To : </span>Gaur City Mall
               </h3>
-              <p>Surajpur road, Greater Noida</p>
+              <p>{props.ride?.destination}</p>
             </div>
             <div className="p-4">
-              <h3 className="text-xl font-bold">₹199.20</h3>
+              <h3 className="text-xl font-bold">₹{props.ride?.fare}</h3>
               <p>Mode : Cash</p>
             </div>
           </div>

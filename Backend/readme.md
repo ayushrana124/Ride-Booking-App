@@ -1,337 +1,239 @@
-# /users/register Endpoint Documentation
+# API Documentation
 
-## Description
+---
 
-This endpoint allows new users to register and create an account. It requires specific user information to be provided in the request body.
+## User Endpoints
 
-## HTTP Method
+### POST `/users/register`
 
-`POST`
+Register a new user.
 
-## Request Body
-
-The request body should be in JSON format and contain the following fields:
-
-*   `firstName`: (String) The first name of the user.
-*   `lastName`: (String) The last name of the user.
-*   `email`: (String) The email address of the user. Must be a valid email format.
-*   `password`: (String) The password for the new account.  Should meet minimum complexity requirements (e.g., minimum length).
-
-Example:
-
+**Request Body:**
 ```json
 {
-    "firstName": "John",
-    "lastName": "Doe",
-    "email": "john.doe@example.com",
-    "password": "SecurePassword123",
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.doe@example.com",
+  "password": "SecurePassword123"
 }
 ```
+**Responses:**
+- `201 Created` – Returns `{ token, user }`
+- `400 Bad Request` – Validation errors or user already exists
 
-## Response Status Codes
+---
 
-*   `201 Created`:  The user account was successfully created.
-*   `400 Bad Request`: The request body is invalid or missing required fields.  The response body will contain details about the validation errors.
-*   `409 Conflict`: An account with the provided email address already exists.
-*   `500 Internal Server Error`: An unexpected error occurred on the server.
+### POST `/users/login`
 
-## Example Success Response
+Login as a user.
 
+**Request Body:**
 ```json
 {
-    "message": "User registered successfully",
-    "userId": "uniqueUserId123"
+  "email": "john.doe@example.com",
+  "password": "SecurePassword123"
 }
 ```
+**Responses:**
+- `200 OK` – Returns `{ token, user }`
+- `400 Bad Request` – Validation errors
+- `401 Unauthorized` – Invalid credentials
 
-#### /users/login Endpoint Documentation
+---
 
-## Description
+### GET `/users/profile`
 
-This endpoint allows registered users to log in to their accounts. It requires the user's email and password for authentication.
+Get the authenticated user's profile.
 
-## HTTP Method
+**Headers:**  
+`Authorization: Bearer <token>`
 
-`POST`
+**Responses:**
+- `200 OK` – Returns `{ user }`
+- `401 Unauthorized` – Invalid or missing token
 
-## Request Body
+---
 
-The request body should be in JSON format and contain the following fields:
+### GET `/users/logout`
 
-*   `email`: (String) The email address of the user. Must be a valid email format.
-*   `password`: (String) The password for the user account.
+Logout the authenticated user.
 
-## Example response
+**Headers:**  
+`Authorization: Bearer <token>`
+
+**Responses:**
+- `200 OK` – Returns `{ message: "Logged out successfully" }`
+- `401 Unauthorized` – Invalid or missing token
+
+---
+
+## Captain Endpoints
+
+### POST `/captains/register`
+
+Register a new captain.
+
+**Request Body:**
 ```json
 {
-    "user": {
-        "_id": "uniqueUserId123",
-        "firstName": "John",
-        "lastName": "Doe",
-        "email": "john.doe@example.com",
-    }
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.doe@example.com",
+  "password": "SecurePassword123",
+  "vehicle": {
+    "color": "Black",
+    "plate": "ABC123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
 }
 ```
+**Responses:**
+- `201 Created` – Returns `{ token, captain }`
+- `400 Bad Request` – Validation errors or captain already exists
 
+---
 
-# /users/profile Endpoint Documentation
+### POST `/captains/login`
 
-## Description
+Login as a captain.
 
-This endpoint retrieves the profile information of the currently authenticated user.
-
-## HTTP Method
-
-`GET`
-
-## Authorization
-
-Requires a valid JWT token in the request header or cookie.
-
-## Response Status Codes
-
-* `200 OK`: Successfully retrieved user profile
-* `401 Unauthorized`: Invalid or missing authentication token
-* `500 Internal Server Error`: An unexpected error occurred on the server
-
-## Example Success Response
-
+**Request Body:**
 ```json
 {
-    "user": {
-        "_id": "uniqueUserId123",
-        "firstName": "John",
-        "lastName": "Doe",
-        "email": "john.doe@example.com",
-    }
+  "email": "john.doe@example.com",
+  "password": "SecurePassword123"
 }
 ```
+**Responses:**
+- `200 OK` – Returns `{ token, captain }`
+- `400 Bad Request` – Validation errors
+- `401 Unauthorized` – Invalid credentials
 
-# /users/logout Endpoint Documentation
+---
 
-## Description
+### GET `/captains/profile`
 
-This endpoint logs out the currently authenticated user by invalidating their JWT token.
+Get the authenticated captain's profile.
 
-## HTTP Method
+**Headers:**  
+`Authorization: Bearer <token>`
 
-`GET`
+**Responses:**
+- `200 OK` – Returns `{ captain }`
+- `401 Unauthorized` – Invalid or missing token
 
-## Authorization
+---
 
-Requires a valid JWT token in the request header or cookie.
+### GET `/captains/logout`
 
-## Response Status Codes
+Logout the authenticated captain.
 
-* `200 OK`: Successfully logged out
-* `401 Unauthorized`: Invalid or missing authentication token
-* `500 Internal Server Error`: An unexpected error occurred on the server
+**Headers:**  
+`Authorization: Bearer <token>`
 
-## Example Success Response
+**Responses:**
+- `200 OK` – Returns `{ message: "Captain logged out successfully" }`
+- `401 Unauthorized` – Invalid or missing token
 
+---
+
+## Maps Endpoints
+
+### GET `/maps/get-coordinates?address=...`
+
+Get latitude and longitude for a given address.
+
+**Headers:**  
+`Authorization: Bearer <token>`
+
+**Query Params:**
+- `address` (string, required)
+
+**Responses:**
+- `200 OK` – Returns `{ ltd, lng }`
+- `400 Bad Request` – Validation errors
+- `401 Unauthorized` – Invalid or missing token
+
+---
+
+### GET `/maps/get-distance-time?origin=...&destination=...`
+
+Get distance and duration between two addresses.
+
+**Headers:**  
+`Authorization: Bearer <token>`
+
+**Query Params:**
+- `origin` (string, required)
+- `destination` (string, required)
+
+**Responses:**
+- `200 OK` – Returns `{ distance, duration }`
+- `400 Bad Request` – Validation errors
+- `401 Unauthorized` – Invalid or missing token
+
+---
+
+### GET `/maps/get-suggestions?input=...`
+
+Get autocomplete suggestions for a location input.
+
+**Headers:**  
+`Authorization: Bearer <token>`
+
+**Query Params:**
+- `input` (string, min 3 chars, required)
+
+**Responses:**
+- `200 OK` – Returns `[ ...suggestions ]`
+- `400 Bad Request` – Validation errors
+- `401 Unauthorized` – Invalid or missing token
+
+---
+
+## Ride Endpoints
+
+### POST `/rides/create`
+
+Create a new ride.
+
+**Headers:**  
+`Authorization: Bearer <token>`
+
+**Request Body:**
 ```json
 {
-    "message": "Logged out successfully"
+  "pickup": "Pickup Address",
+  "destination": "Destination Address",
+  "vehicleType": "car" // or "tuktuk", "motorcycle"
 }
 ```
+**Responses:**
+- `201 Created` – Returns the created ride object
+- `400 Bad Request` – Validation errors
+- `401 Unauthorized` – Invalid or missing token
 
-# Captain Endpoints
+---
 
-# /captain/register Endpoint Documentation
+### GET `/rides/fare?pickup=...&destination=...`
 
-## Description
+Get fare estimates for a ride.
 
-This endpoint allows new captains to register and create an account. It requires specific captain and vehicle information to be provided in the request body.
+**Headers:**  
+`Authorization: Bearer <token>`
 
-## HTTP Method
+**Query Params:**
+- `pickup` (string, required)
+- `destination` (string, required)
 
-`POST`
-
-## Request Body
-
-The request body should be in JSON format and contain the following fields:
-
-*   `fullname`: (Object) Contains captain's name information
-    * `firstname`: (String) The first name of the captain
-    * `lastname`: (String) The last name of the captain
-*   `email`: (String) The email address of the captain
-*   `password`: (String) The password for the account
-*   `vehicle`: (Object) Contains vehicle information
-    * `color`: (String) Color of the vehicle
-    * `plate`: (String) License plate number
-    * `capacity`: (Number) Passenger capacity
-    * `vehicleType`: (String) Type of vehicle (must be 'car', 'motorcycle', or 'auto')
-
-Example:
-
-```json
-{
-    "fullname": {
-        "firstname": "John",
-        "lastname": "Doe"
-    },
-    "email": "john.doe@example.com",
-    "password": "SecurePassword123",
-    "vehicle": {
-        "color": "Black",
-        "plate": "ABC123",
-        "capacity": 4,
-        "vehicleType": "car"
-    }
-}
-```
-
-## Response Status Codes
-
-*   `201 Created`: The captain account was successfully created
-*   `400 Bad Request`: The request body is invalid or missing required fields
-*   `409 Conflict`: An account with the provided email address already exists
-*   `500 Internal Server Error`: An unexpected error occurred on the server
-
-## Example Success Response
-
-```json
-{
-    "token": "jwt_token_here",
-    "captain": {
-        "_id": "uniqueCaptainId123",
-        "fullname": {
-            "firstname": "John",
-            "lastname": "Doe"
-        },
-        "email": "john.doe@example.com",
-        "vehicle": {
-            "color": "Black",
-            "plate": "ABC123",
-            "capacity": 4,
-            "vehicleType": "car"
-        }
-    }
-}
-```
-
-# /captain/login Endpoint Documentation
-
-## Description
-
-This endpoint allows registered captains to log in to their accounts.
-
-## HTTP Method
-
-`POST`
-
-## Request Body
-
-The request body should be in JSON format and contain the following fields:
-
-*   `email`: (String) The email address of the captain
-*   `password`: (String) The password for the account
-
-Example:
-
-```json
-{
-    "email": "john.doe@example.com",
-    "password": "SecurePassword123"
-}
-```
-
-## Response Status Codes
-
-*   `200 OK`: Successfully logged in
-*   `401 Unauthorized`: Invalid credentials
-*   `400 Bad Request`: Invalid request body
-*   `500 Internal Server Error`: An unexpected error occurred on the server
-
-## Example Success Response
-
-```json
-{
-    "token": "jwt_token_here",
-    "captain": {
-        "_id": "uniqueCaptainId123",
-        "fullname": {
-            "firstname": "John",
-            "lastname": "Doe"
-        },
-        "email": "john.doe@example.com",
-        "vehicle": {
-            "color": "Black",
-            "plate": "ABC123",
-            "capacity": 4,
-            "vehicleType": "car"
-        }
-    }
-}
-```
-
-# /captain/profile Endpoint Documentation
-
-## Description
-
-This endpoint retrieves the profile information of the currently authenticated captain.
-
-## HTTP Method
-
-`GET`
-
-## Authorization
-
-Requires a valid JWT token in the request header or cookie.
-
-## Response Status Codes
-
-*   `200 OK`: Successfully retrieved profile
-*   `401 Unauthorized`: Invalid or missing authentication token
-*   `500 Internal Server Error`: An unexpected error occurred on the server
-
-## Example Success Response
-
-```json
-{
-    "captain": {
-        "_id": "uniqueCaptainId123",
-        "fullname": {
-            "firstname": "John",
-            "lastname": "Doe"
-        },
-        "email": "john.doe@example.com",
-        "vehicle": {
-            "color": "Black",
-            "plate": "ABC123",
-            "capacity": 4,
-            "vehicleType": "car"
-        }
-    }
-}
-```
-
-# /captain/logout Endpoint Documentation
-
-## Description
-
-This endpoint logs out the currently authenticated captain by invalidating their JWT token.
-
-## HTTP Method
-
-`GET`
-
-## Authorization
-
-Requires a valid JWT token in the request header or cookie.
-
-## Response Status Codes
-
-*   `200 OK`: Successfully logged out
-*   `401 Unauthorized`: Invalid or missing authentication token
-*   `500 Internal Server Error`: An unexpected error occurred on the server
-
-## Example Success Response
-
-```json
-{
-    "message": "Captain logged out successfully"
-}
-```
+**Responses:**
+- `200 OK` – Returns `{ tuktuk: number, car: number, motorcycle: number }`
+- `400 Bad Request` – Validation errors
+- `401 Unauthorized` – Invalid or missing token
 
 
